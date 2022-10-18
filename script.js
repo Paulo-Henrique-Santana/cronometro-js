@@ -8,7 +8,7 @@ let contagem;
 let arrayTempo = tempo.innerText.split(':');
 let qtdVoltas = 0;
 
-function callback() {
+function iniciarTempo() {
   if (arrayTempo[2] < 99) {
     ++arrayTempo[2];
   } else if (arrayTempo[1] < 59) {
@@ -19,16 +19,20 @@ function callback() {
     arrayTempo[2] = 0;
     arrayTempo[1] = 0;
   }
-  // console.log(arrayTempo)
-  for (let i = 0; i < arrayTempo.length; i++) {
-    if (arrayTempo[i] < 10) {
-      arrayTempo[i] = arrayTempo[i].toLocaleString('en-US', {
+
+  tempo.innerText = addZeroAEsquerda(arrayTempo).join(':');
+}
+
+function addZeroAEsquerda(array) {
+  for (let i = 0; i < array.length; i++) {
+    if (array[i] < 10) {
+      array[i] = array[i].toLocaleString('en-US', {
         minimumIntegerDigits: 2, 
         useGrouping: false
       });
     }
   }
-  tempo.innerText = arrayTempo.join(':');
+  return array;
 }
 
 function trocarClassBotao(botao, classeAtual, classeNova) {
@@ -37,7 +41,7 @@ function trocarClassBotao(botao, classeAtual, classeNova) {
 }
 
 function iniciar() {
-  contagem = setInterval(callback, 10);
+  contagem = setInterval(iniciarTempo, 10);
   btnIniciarOuPausar.innerText = 'Pausar';
   btnRestaurarOuMarcar.innerText = 'Volta';
   trocarClassBotao(btnIniciarOuPausar, 'iniciar', 'pausar')
@@ -65,18 +69,53 @@ function restaurar() {
 
 function marcarVolta() {
   voltas.classList.add('ativo');
-  const volta = document.createElement('tr');
   const numVolta = document.createElement('td');
   numVolta.innerText = ++qtdVoltas;
+  const duracaoVolta = document.createElement('td');
+  duracaoVolta.innerText = calcularDuracaoVolta();
   const tempoVolta = document.createElement('td');
   tempoVolta.innerText = tempo.innerText;
-  const duracaoVolta = document.createElement('td');
+  tempoVolta.classList.add('tempo-volta');
+  const volta = document.createElement('tr');
   volta.appendChild(numVolta);
+  volta.appendChild(duracaoVolta);
   volta.appendChild(tempoVolta);
   if (voltas.children[1]) {
     voltas.insertBefore(volta, voltas.children[1])
   } else {
     voltas.appendChild(volta);
+  }
+}
+
+function calcularDuracaoVolta() {
+  if (voltas.children[1]) {
+    const ultimaVolta = voltas.querySelector('tr:nth-child(2) .tempo-volta').innerText.split(':');
+    let duracaoVolta = []
+    duracaoVolta.push(arrayTempo[0] - ultimaVolta[0]);
+
+    if (arrayTempo[1] < ultimaVolta[1]) {
+      duracaoVolta.push(arrayTempo[1] - 1);
+      duracaoVolta.push(arrayTempo[2])
+    } else {
+      duracaoVolta.push(arrayTempo[1] - ultimaVolta[1]);
+    }
+
+    if (arrayTempo[2] < ultimaVolta[2]) {
+      --duracaoVolta[1];
+      duracaoVolta.push(+arrayTempo[2] + 100 - +ultimaVolta[2]);
+      console.log('1')
+
+    } else {
+      duracaoVolta.push(+arrayTempo[2] - +ultimaVolta[2]);
+      console.log('2')
+
+    }
+
+    console.log(arrayTempo, ultimaVolta)
+    console.log(duracaoVolta)
+    return addZeroAEsquerda(duracaoVolta).join(':');
+  } else {
+    return tempo.innerText;
   }
 }
 
