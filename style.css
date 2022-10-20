@@ -30,6 +30,11 @@ body {
   font-weight: bold;
   border-radius: 10px;
   cursor: pointer;
+  transition: filter 0.2s ease-in-out;
+}
+
+.botoes button:enabled:hover {
+  filter: brightness(105%);
 }
 
 .iniciar {
@@ -66,7 +71,7 @@ table {
   display: none;
   width: min-content;
   margin-top: 50px;
-  font-size: 2rem;
+  font-size: 1.6rem;
   color: #050505;
 }
 
@@ -84,7 +89,7 @@ table tr td:nth-child(2) {
 
 @media (max-width: 768px) {
   .tempo {
-    font-size: 5rem;
+    font-size: 5.5rem;
   }
   .botoes button {
     width: 80px;
@@ -92,16 +97,16 @@ table tr td:nth-child(2) {
     font-size: 0.9rem;
   }
   table {
-    font-size: 1.8rem;
+    font-size: 1.4rem;
   }
-  table tr :nth-child(2){
-    padding-left: 30px;
+  table tr td:nth-child(2) {
+    padding: 0 30px;
   }
 }
 
 @media (max-width: 425px) {
   .tempo {
-    font-size: 3.5rem;
+    font-size: 4rem;
   }
   .botoes button {
     width: 60px;
@@ -109,9 +114,9 @@ table tr td:nth-child(2) {
     font-size: 0.7rem;
   }
   table {
-    font-size: 1.4rem;
+    font-size: 1.2rem;
   }
-  table tr :nth-child(2){
-    padding-left: 20px;
+  table tr td:nth-child(2) {
+    padding: 0 20px;
   }
 }
